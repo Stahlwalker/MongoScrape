@@ -3,6 +3,8 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var request = require('request'); 
 
+var axios = require("axios");
+
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
 // It works on the client and on the server
@@ -29,11 +31,11 @@ app.get('/'), function(request, response) {
     res.send(index.html);
 }
 
-// A GET route for scraping the echoJS website
+// A GET route for scraping the tribune website
 app.get("/scrape", function(req, res) {
     console.log("scraping");
   // First, we grab the body of the html with request
-    request("http://www.nytimes.com/").then(function(response) {
+    axios.get("http://www.chicagotribune.com/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
