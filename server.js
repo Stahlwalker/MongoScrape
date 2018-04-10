@@ -39,10 +39,10 @@ var MONGO_URI = process.env.MONGO_URI || "mongodb://localhost/newsdb";
 
 
 // Connect to the Mongo DB
-mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI, {
-  useMongoClient: true
-});
+// mongoose.Promise = Promise;
+// mongoose.connect(MONGODB_URI, {
+//   useMongoClient: true
+// });
 
 
 mongoose.connect(MONGO_URI, function(error) {
@@ -56,5 +56,5 @@ mongoose.connect(MONGO_URI, function(error) {
 
 // Start the server
 app.listen(PORT, function() {
-  console.log("App running on port " + PORT + "!");
+  console.log("App running on port " + PORT +"!");
 });
