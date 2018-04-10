@@ -34,21 +34,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //every request go through router middlesware
 app.use(router);
 
-
+//if deployed use database otherwise locoal mongo
+var MONGO_URI = process.env.MONGO_URI || "mongodb://localhost/newsdb";
 
 
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
-//if deployed use database otherwise locoal mongo
-var db = process.env.MONGO_URI || "mongodb://localhost/newsdb";
-if(process.env.MONGO_URI) {
-  mongoose.connect(process.env.MONGODB_URI)
-} else {
-  mongoose.connect(dbConnect);
-}
+mongoose.connect(MONGODB_URI, {
+  useMongoClient: true
+});
 
 
-mongoose.connect(db, function(error) {
+mongoose.connect(MONGO_URI, function(error) {
   if (error) {
     console.log(error);
   }
@@ -59,5 +56,5 @@ mongoose.connect(db, function(error) {
 
 // Start the server
 app.listen(PORT, function() {
-  console.log("App running on port " + PORT);
+  console.log("App running on port " + PORT + "!");
 });
