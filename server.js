@@ -26,16 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(router);
 
 //if deployed use database otherwise locoal mongo
-var MONGO_URI = process.env.MONGO_URI || "mongodb://localhost/newsdb";
-console.log(MONGO_URI);
-
-
-// Connect to the Mongo DB
-// mongoose.Promise = Promise;
-// mongoose.connect(MONGODB_URI, {
-//   useMongoClient: true
-// });
-
+var MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/newsdb";
 
 mongoose.connect(MONGO_URI, function(error) {
   if (error) {
