@@ -2,8 +2,8 @@
 var scrape = require("../scripts/scrape");
 
 // Bring headlines and notes from the controller
-var headlineController = require("../controllers/headline");
-var noteController = require("../controllers/note");
+var headlineController = require("../controllers/headlines");
+var noteController = require("../controllers/notes");
 
 module.exports = function(router) {
   // This route renders the homepage
@@ -39,7 +39,7 @@ module.exports = function(router) {
   });
 
   // This route handles getting all headlines from our database
-  router.get("/api/headline", function(req, res) {
+  router.get("/api/headlines", function(req, res) {
     // If the client specifies a saved query parameter, ie "/api/headlines/?saved=true"
     // which is translated to just { saved: true } on req.query,
     // then set the query object equal to this
@@ -57,7 +57,7 @@ module.exports = function(router) {
   });
 
   // This route handles deleting a specified headline
-  router.delete("/api/headline/:id", function(req, res) {
+  router.delete("/api/headlines/:id", function(req, res) {
     var query = {};
     // Set the _id property of the query object to the id in req.params
     query._id = req.params.id;
@@ -71,7 +71,7 @@ module.exports = function(router) {
   });
 
   // This route handles updating a headline, in particular saving one
-  router.patch("/api/headline", function(req, res) {
+  router.patch("/api/headlines", function(req, res) {
     // Construct a query object to send to the headlinesController with the
     // id of the headline to be saved
 
@@ -85,7 +85,7 @@ module.exports = function(router) {
   });
 
   // This route handles getting notes for a particular headline id
-  router.get("/api/note/:headline_id?", function(req, res) {
+  router.get("/api/notes/:headline_id?", function(req, res) {
     // If we are supplied a headline id in req.params, then we will add the id to our query object
     // Otherwise query will remain an empty object and thus return every note
     var query = {};
@@ -102,7 +102,7 @@ module.exports = function(router) {
   });
 
   // This route handles deleting a note of a particular note id
-  router.delete("/api/note/:id", function(req, res) {
+  router.delete("/api/notes/:id", function(req, res) {
     var query = {};
     query._id = req.params.id;
 
@@ -115,7 +115,7 @@ module.exports = function(router) {
   });
 
   // This route handles saving a new note
-  router.post("/api/note", function(req, res) {
+  router.post("/api/notes", function(req, res) {
     noteController.save(req.body, function(data) {
       // Send the note to the browser as a json
       res.json(data);
