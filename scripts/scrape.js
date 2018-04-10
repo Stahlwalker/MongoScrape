@@ -4,20 +4,20 @@ var cheerio = require("cheerio");
 
 var scrape = function(cb) {
    // First, we grab the body of the html with request
-   request("http://www.nytimes.com", function(err, res, body) {
+   request("http://www.chicagotribune.com/", function(err, res, body) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(body);
 
     var articles = [];
 
     // Now, we grab every h2 within an article tag, and do the following:
-    $(".theme-summary").each(function(i, element) {
+    $(".trb_outfit_primaryItem_article_title_a").each(function(i, element) {
       
-      var head = $(this).children(".story-heading").text().trim();
+      var head = $(this).children(".trb_outfit_primaryItem_article_title trb_outfit_featuredArticleTitle").text().trim();
 
       // Then we grab any children with the class of summary and then grab it's inner text
       // We store this to the sum variable. This is the article summary
-      var sum = $(this).children(".summary").text().trim();
+      var sum = $(this).children(".trb_outfit_primaryItem_article_content").text().trim();
 
       // So long as our headline and sum aren't empty or undefined, do the following
       if (head && sum) {
