@@ -1,8 +1,17 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
-var request = require('request'); 
+// var request = require('request'); 
 var exphbs = require('express-handlebars');
+
+var PORT = 3000 || process.env.PORT;
+
+// Initialize Express
+var app = express();
+
+var router = express.Router();
+
+require("./config/routes")(router);
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -12,28 +21,34 @@ var cheerio = require("cheerio");
 // Require all models
 var Article = require("./models/index.js");
 
-var PORT = 3000 || process.env.PORT;
-// Initialize Express
-var app = express();
 
-var routes = require("./routes");
-// Use body-parser for handling form submissions
-app.use(bodyParser.urlencoded({ extended: true }));
 // Use express.static to serve the public folder as a static directory
-app.use(express.static("public"));
+app.use(express.static(_dirname + "/public"));
+
 app.engine("handlebars", exphbs({defaultLayout:"main"}));
 app.set("view engine", "handlebars");
 
-var MONGO_URI = process.env.MONGO_URI || "mongodb://localhost/newsdb";
+// Use body-parser for handling form submissions
+app.use(bodyParser.urlencoded({ extended: false }));
+
+//every request go through router middlesware
+app.use(router);
+
+//if deployed use database otherwise locoal mongo
+var db = process.env.MONGO_URI || "mongodb://localhost/newsdb";
+
+
 // Connect to the Mongo DB
-mongoose.connect(MONGO_URI);
-
-// Routes
-
-app.use(routes);
-
+mongoose.connect(db, function(error) {
+  if (error) {
+    console.log(error);
+  }
+  else {
+    console.log("mongoose connection success")
+  }
+  });
 
 // Start the server
 app.listen(PORT, function() {
-  console.log("App running on port " + PORT + "!");
+  console.log("App running on port " + PORT);
 });
