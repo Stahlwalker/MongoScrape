@@ -39,6 +39,12 @@ var db = process.env.MONGO_URI || "mongodb://localhost/newsdb";
 
 
 // Connect to the Mongo DB
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI, {
+  useMongoClient: true
+});
+
+
 mongoose.connect(db, function(error) {
   if (error) {
     console.log(error);
