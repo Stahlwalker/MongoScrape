@@ -5,7 +5,8 @@ html {
   
   body {
     margin-bottom: 80px;
-    background-image: url("../images/news.jpg");
+    /* background-image: url("../images/news.jpg"); */
+    background-color: grey;
   }
   
   .footer {
@@ -45,6 +46,7 @@ html {
     height: 100%;
     background-image: url("../images/news3.jpg");
     background-size: cover;
+    background-position: center;
   }
   
   .jumbotron .caption {
