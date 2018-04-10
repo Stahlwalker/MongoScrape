@@ -27,6 +27,7 @@ app.use(router);
 
 //if deployed use database otherwise locoal mongo
 var MONGO_URI = process.env.MONGO_URI || "mongodb://localhost/newsdb";
+console.log(MONGO_URI);
 
 
 // Connect to the Mongo DB
