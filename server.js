@@ -23,7 +23,7 @@ require("./config/routes")(router);
 
 
 // Use express.static to serve the public folder as a static directory
-app.use(express.static("/public"));
+app.use(express.static(__dirname + "/public"));
 
 app.engine("handlebars", exphbs({defaultLayout:"main"}));
 app.set("view engine", "handlebars");
