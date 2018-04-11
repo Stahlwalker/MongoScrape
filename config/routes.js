@@ -1,36 +1,25 @@
-// Bring in the Scrape function from our scripts directory
 var scrape = require("../scripts/scrape");
-
-// Bring headlines and notes from the controller
 var headlineController = require("../controllers/headlines");
 var noteController = require("../controllers/notes");
 
-module.exports = function(router) {
-  // This route renders the homepage
-  router.get("/", function(req, res) {
+module.exports = function (router) {
+  router.get("/", function (req, res) {
     res.render("home");
   });
 
-  // This route renders the saved handledbars page
-  router.get("/saved", function(req, res) {
+  router.get("/saved", function (req, res) {
     res.render("saved");
   });
 
   // This route handles scraping more articles to add to our db
-  router.get("/api/fetch", function(req, res) {
+  router.get("/api/fetch", function (req, res) {
 
-    // This method inside the headlinesController will try and scrap new articles
-    // and save unique ones to our database
-    headlineController.fetch(function(err, docs) {
-      // If we don't get any articles back, likely because there are no new
-      // unique articles, send this message back to the user
+    headlineController.fetch(function (err, docs) {
       if (!docs || docs.insertedCount === 0) {
         res.json({
           message: "No new articles today. Check back tomorrow!"
         });
-      }
-      // Otherwise send back a count of how many new articles we got
-      else {
+      } else {
         res.json({
           message: "Added " + docs.insertedCount + " new articles!"
         });
@@ -38,87 +27,105 @@ module.exports = function(router) {
     });
   });
 
-  // This route handles getting all headlines from our database
-  router.get("/api/headlines", function(req, res) {
-    // If the client specifies a saved query parameter, ie "/api/headlines/?saved=true"
-    // which is translated to just { saved: true } on req.query,
-    // then set the query object equal to this
+  router.get("/api/headlines", function (req, res) {
     var query = {};
     if (req.query.saved) {
       query = req.query;
     }
 
-    // Run the headlinesController get method and pass in whether we want saved, unsaved,
-    // (or all headlines by default)
-    headlineController.get(query, function(data) {
-      // Send the article data back as JSON
+    headlineController.get(query, function (data) {
       res.json(data);
     });
   });
 
-  // This route handles deleting a specified headline
-  router.delete("/api/headlines/:id", function(req, res) {
+  router.delete("/api/headlines/:id", function (req, res) {
     var query = {};
-    // Set the _id property of the query object to the id in req.params
     query._id = req.params.id;
-
-    // Run the headlinesController delete method and pass in our query object containing
-    // the id of the headline we want to delete
-    headlineController.delete(query, function(err, data) {
-      // Send the result back as JSON to be handled client side
+    headlineController.delete(query, function (err, data) {
       res.json(data);
     });
   });
 
-  // This route handles updating a headline, in particular saving one
-  router.patch("/api/headlines", function(req, res) {
-    // Construct a query object to send to the headlinesController with the
-    // id of the headline to be saved
-
-    // We're using req.body here instead of req.params to make this route easier to
-    // change if we ever want to update a headline in any way except saving it
-
-    headlineController.update(req.body, function(err, data) {
-      // After completion, send the result back to the user
+  router.patch("/api/headlines", function (req, res) {
+    headlineController.update(req.body, function (err, data) {
       res.json(data);
     });
   });
 
-  // This route handles getting notes for a particular headline id
-  router.get("/api/notes/:headline_id?", function(req, res) {
-    // If we are supplied a headline id in req.params, then we will add the id to our query object
-    // Otherwise query will remain an empty object and thus return every note
+  router.get("/api/notes/:headline_id?", function (req, res) {
     var query = {};
     if (req.params.headline_id) {
       query._id = req.params.headline_id;
     }
-
-    // Get all notes that match our query using the notesController get method
-    noteController.get(query, function(err, data) {
-
-      // Send the note data back to the user as JSON
+    noteController.get(query, function (err, data) {
       res.json(data);
     });
   });
 
-  // This route handles deleting a note of a particular note id
-  router.delete("/api/notes/:id", function(req, res) {
+  router.delete("/api/notes/:id", function (req, res) {
     var query = {};
     query._id = req.params.id;
 
-    // Use the check function from the headlines controller,
-    // this checks all of our articles, sorted by id number
-    noteController.delete(query, function(err, data) {
-      // Send the article data to a json
+    noteController.delete(query, function (err, data) {
       res.json(data);
     });
   });
 
-  // This route handles saving a new note
-  router.post("/api/notes", function(req, res) {
-    noteController.save(req.body, function(data) {
-      // Send the note to the browser as a json
+  router.post("/api/notes", function (req, res) {
+    noteController.save(req.body, function (data) {
       res.json(data);
     });
   });
 };
+
+
+
+// // Route for getting all Articles from the db
+// app.get("/articles", function(req, res) {
+//     // Grab every document in the Articles collection
+//     db.Article.find({})
+//       .then(function(dbArticle) {
+//         // If we were able to successfully find Articles, send them back to the client
+//         res.json(dbArticle);
+//       })
+//       .catch(function(err) {
+//         // If an error occurred, send it to the client
+//         res.json(err);
+//       });
+//   });
+
+//   // Route for grabbing a specific Article by id, populate it with it's note
+//   app.get("/articles/:id", function(req, res) {
+//     // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+//     db.Article.findOne({ _id: req.params.id })
+//       // ..and populate all of the notes associated with it
+//       .populate("note")
+//       .then(function(dbArticle) {
+//         // If we were able to successfully find an Article with the given id, send it back to the client
+//         res.json(dbArticle);
+//       })
+//       .catch(function(err) {
+//         // If an error occurred, send it to the client
+//         res.json(err);
+//       });
+//   });
+
+//   // Route for saving/updating an Article's associated Note
+//   app.post("/articles/:id", function(req, res) {
+//     // Create a new note and pass the req.body to the entry
+//     db.Note.create(req.body)
+//       .then(function(dbNote) {
+//         // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
+//         // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
+//         // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+//         return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+//       })
+//       .then(function(dbArticle) {
+//         // If we were able to successfully update an Article, send it back to the client
+//         res.json(dbArticle);
+//       })
+//       .catch(function(err) {
+//         // If an error occurred, send it to the client
+//         res.json(err);
+//       });
+//   });

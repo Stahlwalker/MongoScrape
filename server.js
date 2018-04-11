@@ -16,11 +16,15 @@ require("./config/routes")(router);
 // Use express.static to serve the public folder as a static directory
 app.use(express.static(__dirname + "/public"));
 
-app.engine("handlebars", exphbs({defaultLayout:"main"}));
+app.engine("handlebars", exphbs({
+  defaultLayout: "main"
+}));
 app.set("view engine", "handlebars");
 
 // Use body-parser for handling form submissions
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 //every request go through router middlesware
 app.use(router);
@@ -28,18 +32,17 @@ app.use(router);
 //if deployed use database otherwise locoal mongo
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsdb";
 
-mongoose.connect(MONGODB_URI, function(error) {
+mongoose.connect(MONGODB_URI, function (error) {
   if (error) {
     console.log(error);
-  }
-  else {
+  } else {
     console.log("mongoose connection success")
   }
-  });
+});
 
 // Start the server
-app.listen(PORT, function() {
-  console.log("App running on port " + PORT +"!");
+app.listen(PORT, function () {
+  console.log("App running on port " + PORT + "!");
 });
 
 
