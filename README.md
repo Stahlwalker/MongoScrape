@@ -18,7 +18,7 @@
     * 3. save articles of interest
     * 4. click saved articles in navbar to review saved articles
     * 5. take notes on saved articles
-    *6. delete articles if need be
+    * 6. delete articles if need be
 
 ## Who maintains and contributes to the project?
     * This project was created for a coding bootcamp and is maintained by the author Luke Stahl. 
