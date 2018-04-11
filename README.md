@@ -1,7 +1,8 @@
 # MongoScrape
 
+[MongoScrape Chicago Tribune](https://safe-mountain-16928.herokuapp.com/)
 
-[Friend Finder App](https://mighty-scrubland-37997.herokuapp.com/)
+![This is a screen shot of my app](https://github.com/Stahlwalker/MongoScrape/blob/master/public/assets/images/project.png)
 
 ## What the project does?
     * This project uses NPMs body-parser, cheerio, express, express-handlebars, mongoose and request to scrape news articles from the Chicago Tribune and display them for users to save, take notes and delete. 
