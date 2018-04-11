@@ -9,11 +9,11 @@ var scrape = function(cb) {
     var $ = cheerio.load(body);
 
     var articles = [];
-
+    
     // Now, we grab every h2 within an article tag, and do the following:
-    $(".trb_outfit_primaryItem_article_title_a").each(function(i, element) {
+    $(".trb_outfit_primaryItem_article").each(function(i, element) {
       
-      var head = $(this).children(".trb_outfit_primaryItem_article_title trb_outfit_featuredArticleTitle").text().trim();
+      var head = $(this).children(".trb_outfit_primaryItem_article_title.trb_outfit_featuredArticleTitle").text().trim();
 
       // Then we grab any children with the class of summary and then grab it's inner text
       // We store this to the sum variable. This is the article summary
