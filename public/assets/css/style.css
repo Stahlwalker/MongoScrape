@@ -175,3 +175,9 @@ html {
     padding-right: 15px;
     width: 75%;
 }
+textarea {
+  /* padding: 10px; */
+  /* resize: none; */
+  /* position: relative; */
+  width: 100%;
+}
